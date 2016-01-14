@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>ESV bible to leetspeak</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='esv.css') }}">
+    </head>
+ 
+<body>
+<div class="container">
+    <div class="header">
+        <nav>
+            <ul class="nav nav-pills pull-right">
+                <li role="presentation" class="active"><a href="http://localhost:5000">Home</a>
+                </li>
+            </ul>
+        </nav>
+        <h3 class="text-muted">ESV to leetspeak</h3>
+    </div>
+
+    <div class="jumbotron">
+        <div class="lead">
+            <p>Enter a verse here and press the button</p>
+            <form role="form" method='POST' action='/'>
+            <input name="verse" id="verse"></input>
+            <button type="submit">Submit</button>
+            </form>
+        </div>
+        </p>
+    </div>
+
+    <div class="row marketing">
+        {% if verse_text %}
+        <div class="col-lg-6">
+            <h4>Verse in plain text</h4>
+            <p>
+            {{ verse_text }}
+            </p>
+        </div>
+        {% endif %}
+
+        {% if verse_leet %}
+        <div class="col-lg-6">
+            <h4>Verse in leetspeak</h4>
+            <p>
+            {{ verse_leet }}
+            </p>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if verse_leet %}
+    <div>
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
