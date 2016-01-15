@@ -1,12 +1,17 @@
 from flask import Flask, render_template, request
-import urllib, sys, json
 from esvtoleet import LeetSpeak, ESVSession
+import urllib
+import sys
+import json
+import os
 
 app = Flask(__name__)
+
 
 @app.errorhandler(Exception)
 def exception_handler(error):
     return "!!!!"  + repr(error)
+
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
@@ -28,5 +33,8 @@ def main():
             error = "didn't work"
     return render_template('index.html', error=error, verse_text=verse_text, verse_leet=verse_leet)
 
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    address = os.getenv("OPENSHIFT_PYTHON_IP")
+    app.run(address, port=8080)
+    app.run()
