@@ -35,6 +35,4 @@ def main():
 
 
 if __name__ == "__main__":
-    address = os.getenv("OPENSHIFT_PYTHON_IP")
-    app.run(address, port=8080)
-    app.run()
+    app.run('0.0.0.0', port=5000)
