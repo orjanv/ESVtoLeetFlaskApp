@@ -24,9 +24,10 @@ def main():
     verse_text = ''
     verse_leet = ''
 
-    if request.method == "POST":
+    if request.method == "GET":
         try:
-            verse_ref = request.form['verse']
+            verse_ref = request.args.get('verse')
+            #verse_ref = request.form['verse']
             verse_text = bible.doPassageQuery(verse_ref)
             verse_leet = leet.toLeet(verse_text)
         except:
