@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
 import urllib
+import requests
 import sys
+import json
+import urllib2
 
 class LeetSpeak():
     def __init__(self):
@@ -45,29 +48,28 @@ class ESVSession:
         page = urllib.urlopen(url)
         return page.read()
 
-class ESVAPIV3:
-    def __init__(self, token, url):
-        req = urllib2.Request(json_url, headers={'Authorization': 'Token' token'})
-        response = urllib2.urlopen(req)
-        print response
+class ESVAPIv3:
+    def __init__(self):
+        return None        
+        
+    def doPassageQuery(self, passage):
 
-            req = urllib2.Request(json_url, headers={'User-Agent': USER_AGENT})
-            response = urllib2.urlopen(req)
-            data = json.load(response)
-            for k in data['data']:
-                ddata[k['fullTitle']] = (k['url'], k['title'], k['availabilityText'], k['seasonNumber'], key)
-                key = key + 1
+        json_url = 'https://api.esv.org/v3/passage/text/'
+        token = 'b8c82a38daaea9fd91c7dcd31b2433f0e4d95172'
+
+        data = requests.get(json_url, 
+                      params={'q': passage}, 
+                      headers={'User-Agent': 'Mozilla/5.0', 'Authorization': 'Token ' + token})
+                
+
+        for p in data:
+            print p
+            return p
 
 
 if __name__ == '__main__':
 
-    #key = 'IP'
-    #bible = ESVSession(key)
-
-    url = 'https://api.esv.org/v3/passage/text/?q='
-    token = 'b8c82a38daaea9fd91c7dcd31b2433f0e4d95172'
-
-    bible = ESVAPIV3(token, url)
+    bible = ESVAPIv3()
     leet = LeetSpeak()
 
     try:
