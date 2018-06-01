@@ -61,7 +61,6 @@ class ESVAPIv3:
                       params={'q': passage}, 
                       headers={'User-Agent': 'Mozilla/5.0', 'Authorization': 'Token ' + token})
                 
-
         for p in data:
             print p
             return p
