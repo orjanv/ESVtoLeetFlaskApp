@@ -45,10 +45,29 @@ class ESVSession:
         page = urllib.urlopen(url)
         return page.read()
 
+class ESVAPIV3:
+    def __init__(self, token, url):
+        req = urllib2.Request(json_url, headers={'Authorization': 'Token' token'})
+        response = urllib2.urlopen(req)
+        print response
+
+            req = urllib2.Request(json_url, headers={'User-Agent': USER_AGENT})
+            response = urllib2.urlopen(req)
+            data = json.load(response)
+            for k in data['data']:
+                ddata[k['fullTitle']] = (k['url'], k['title'], k['availabilityText'], k['seasonNumber'], key)
+                key = key + 1
+
+
 if __name__ == '__main__':
 
-    key = 'IP'
-    bible = ESVSession(key)
+    #key = 'IP'
+    #bible = ESVSession(key)
+
+    url = 'https://api.esv.org/v3/passage/text/?q='
+    token = 'b8c82a38daaea9fd91c7dcd31b2433f0e4d95172'
+
+    bible = ESVAPIV3(token, url)
     leet = LeetSpeak()
 
     try:
@@ -64,3 +83,4 @@ if __name__ == '__main__':
     while passage != 'quit':
         print leet.toLeet(bible.doPassageQuery(passage))
         passage = raw_input('Enter passage: ')
+

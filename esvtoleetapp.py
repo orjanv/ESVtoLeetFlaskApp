@@ -1,12 +1,53 @@
 from flask import Flask, render_template, request
-from esvtoleet import LeetSpeak, ESVSession
 import urllib
 import sys
 import json
 import os
 
-app = Flask(__name__)
+class LeetSpeak():
+    def __init__(self):
+        self.x = '1337'
 
+    def toLeet(self, text):
+        leet = (
+            (('are', 'Are'), 'r'),
+            (('ate', 'Ate'), '8'),
+            (('that', 'That'), 'tht'),
+            (('you', 'You'), 'j00'),
+            (('o', 'O'), '0'),
+            (('i', 'I'), '1'),
+            (('e', 'E'), '3'),
+            (('s', 'S'), '5'),
+            (('a', 'A'), '4'),
+            (('t', 'T'), '7'),
+            )
+        for symbols, replaceStr in leet:
+            for symbol in symbols:
+                text = text.replace(symbol, replaceStr)
+        return text
+
+class ESVSession:
+    def __init__(self, key):
+        options = ['include-short-copyright=0',
+                   'output-format=plain-text',
+                   'include-passage-horizontal-lines=0',
+                   'include-heading-horizontal-lines=0',
+                   'include-headings=0',
+                   'include-footnote-links=0',
+                   'include-footnotes=0',
+                   'include-passage-references=1']
+        self.options = '&'.join(options)
+        self.baseUrl = 'http://www.esvapi.org/v2/rest/passageQuery?key=%s' % (key)
+
+    def doPassageQuery(self, passage):
+        passage = passage.split()
+        passage = '+'.join(passage)
+        url = self.baseUrl + '&passage=%s&%s' % (passage, self.options)
+        page = urllib.urlopen(url)
+        return page.read()
+
+
+app = Flask(__name__)
 
 @app.errorhandler(Exception)
 def exception_handler(error):
