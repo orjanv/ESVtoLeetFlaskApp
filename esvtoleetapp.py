@@ -26,27 +26,26 @@ class LeetSpeak():
                 text = text.replace(symbol, replaceStr)
         return text
 
-class ESVSession:
-    def __init__(self, key):
-        options = ['include-short-copyright=0',
-                   'output-format=plain-text',
-                   'include-passage-horizontal-lines=0',
-                   'include-heading-horizontal-lines=0',
-                   'include-headings=0',
-                   'include-footnote-links=0',
-                   'include-footnotes=0',
-                   'include-passage-references=1']
-        self.options = '&'.join(options)
-        self.baseUrl = 'http://www.esvapi.org/v2/rest/passageQuery?key=%s' % (key)
 
+class ESVAPIv3:
+    def __init__(self):
+        return None        
+        
     def doPassageQuery(self, passage):
-        passage = passage.split()
-        passage = '+'.join(passage)
-        url = self.baseUrl + '&passage=%s&%s' % (passage, self.options)
-        page = urllib.urlopen(url)
-        return page.read()
 
+        json_url = 'https://api.esv.org/v3/passage/text/'
+        token = 'b8c82a38daaea9fd91c7dcd31b2433f0e4d95172'
+        params = {'q': passage}
+        headers = {'User-Agent': 'Mozilla/5.0', 'Authorization': 'Token ' + token}
+        
+        data = requests.get(json_url, 
+            params={'q': passage}, 
+            headers={'User-Agent': 'Mozilla/5.0', 'Authorization': 'Token ' + token})
 
+        print data.json()['passages'][0]
+        return data.json()['passages'][0]
+        
+        
 app = Flask(__name__)
 
 @app.errorhandler(Exception)
@@ -58,7 +57,7 @@ def exception_handler(error):
 def main():
 
     # Initiate the leetspeak translator classes
-    bible = ESVSession('IP')
+    bible = ESVAPIv3()
     leet = LeetSpeak()
 
     error = ''
