@@ -40,8 +40,9 @@ class ESVAPIv3:
     def doPassageQuery(self, passage):
         token = "b8c82a38daaea9fd91c7dcd31b2433f0e4d95172"
         self.url = "https://api.esv.org/v3/passage/text/"
-        passage = passage.split()
-        passage = '+'.join(passage)
+        if passage is not None:
+            passage = passage.split()
+            passage = '+'.join(passage)
         json_url = self.url + '?q=%s&%s' % (passage, self.options)
         data = requests.get(json_url, headers={'User-Agent': 'Mozilla/5.0', 'Authorization': 'Token ' + token})
         return data.json()['passages'][0]
