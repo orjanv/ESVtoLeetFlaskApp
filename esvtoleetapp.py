@@ -3,6 +3,7 @@ import urllib
 import sys
 import json
 import os
+import requests
 
 class LeetSpeak():
     def __init__(self):
@@ -29,17 +30,20 @@ class LeetSpeak():
 
 class ESVAPIv3:
     def __init__(self):
-        return None        
+        options = ['include-footnotes=false',
+            'include-short-copyright=false',
+            'include-passage-horizontal-lines=false',
+            'include-heading-horizontal-lines=false',
+            'include-headings=false']
+        self.options = '&'.join(options)
         
     def doPassageQuery(self, passage):
-
-        json_url = 'https://api.esv.org/v3/passage/text/'
-        token = 'b8c82a38daaea9fd91c7dcd31b2433f0e4d95172'        
-        data = requests.get(json_url, 
-            params={'q': passage}, 
-            headers={'User-Agent': 'Mozilla/5.0', 'Authorization': 'Token ' + token})
-
-#        print data.json()['passages'][0]
+        token = "b8c82a38daaea9fd91c7dcd31b2433f0e4d95172"
+        self.url = "https://api.esv.org/v3/passage/text/"
+        passage = passage.split()
+        passage = '+'.join(passage)
+        json_url = self.url + '?q=%s&%s' % (passage, self.options)
+        data = requests.get(json_url, headers={'User-Agent': 'Mozilla/5.0', 'Authorization': 'Token ' + token})
         return data.json()['passages'][0]
         
         
@@ -57,20 +61,19 @@ def main():
     bible = ESVAPIv3()
     leet = LeetSpeak()
 
-    error = 'all is well'
-    verse_text = ''
-    verse_leet = ''
+    error = ""
+    verse_text = ""
+    verse_leet = ""
 
     if request.method == "GET":
         try:
             verse_ref = request.args.get('verse')
-            #verse_ref = request.form['verse']
             verse_text = bible.doPassageQuery(verse_ref)
             verse_leet = leet.toLeet(verse_text)
-        except:
+        except IndexError:
             error = "didn't work"
     return render_template('index.html', error=error, verse_text=verse_text, verse_leet=verse_leet)
 
 
 if __name__ == "__main__":
-    app.run('0.0.0.0', port=5000)
+    app.run('0.0.0.0', port=5000, threaded=True)

@@ -31,19 +31,21 @@ class LeetSpeak():
 
 class ESVAPIv3:
     def __init__(self):
-        return None        
+        options = ['include-footnotes=false',
+            'include-short-copyright=false',
+            'include-passage-horizontal-lines=false',
+            'include-heading-horizontal-lines=false',
+            'include-headings=false']
+        self.options = '&'.join(options)
         
     def doPassageQuery(self, passage):
-
-        json_url = 'https://api.esv.org/v3/passage/text/'
-        token = 'b8c82a38daaea9fd91c7dcd31b2433f0e4d95172'        
-        data = requests.get(json_url, 
-            params={'q': passage}, 
-            headers={'User-Agent': 'Mozilla/5.0', 'Authorization': 'Token ' + token})
-
-#        print data.json()['passages'][0]
+        token = "b8c82a38daaea9fd91c7dcd31b2433f0e4d95172"
+        self.url = "https://api.esv.org/v3/passage/html/"
+        passage = passage.split()
+        passage = '+'.join(passage)
+        json_url = self.url + '?q=%s&%s' % (passage, self.options)
+        data = requests.get(json_url, headers={'User-Agent': 'Mozilla/5.0', 'Authorization': 'Token ' + token})
         return data.json()['passages'][0]
-
 
 if __name__ == '__main__':
 
