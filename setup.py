@@ -6,5 +6,5 @@ setup(name='ESV to leetspeak',
       author='Orjan H. H. Vollestad',
       author_email='orjanv@gmail.com',
       url='https://github.com/orjanv/ESVtoLeetFlaskApp',
-      install_requires=['Flask==0.10.1'],
+      install_requires=['Flask==1.0'],
      )
